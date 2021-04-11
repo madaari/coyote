@@ -349,6 +349,10 @@ namespace Microsoft.Coyote.Rewriting
             {
                 result = this.Module.ImportReference(typeof(ControlledTasks.ThreadPool));
             }
+            else if (fullName == CachedNameProvider.InterlockedFullName)
+            {
+                result = this.Module.ImportReference(typeof(ControlledTasks.Interlocked));
+            }
 
             if (isRoot && result != type)
             {
