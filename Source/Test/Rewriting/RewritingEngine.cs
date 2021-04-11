@@ -13,8 +13,8 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Coyote.Interception;
 using Microsoft.Coyote.IO;
-using Microsoft.Coyote.SystematicTesting.Interception;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
@@ -24,7 +24,7 @@ namespace Microsoft.Coyote.Rewriting
     /// Engine that can rewrite a set of assemblies for systematic testing.
     /// </summary>
     /// <remarks>
-    /// See <see href="/coyote/learn/tools/rewriting">Coyote rewriting tool</see> for more information.
+    /// See <see href="/coyote/get-started/rewriting">rewriting</see> for more information.
     /// </remarks>
     public class RewritingEngine
     {
@@ -109,7 +109,7 @@ namespace Microsoft.Coyote.Rewriting
                 combined.Append(e);
             }
 
-            combined.Append(")");
+            combined.Append(')');
             try
             {
                 this.DisallowedAssemblies = new Regex(combined.ToString());

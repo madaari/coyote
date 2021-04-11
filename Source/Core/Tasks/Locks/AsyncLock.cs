@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Coyote.Runtime;
-using Microsoft.Coyote.SystematicTesting;
 using TCS = System.Threading.Tasks.TaskCompletionSource<object>;
 
 namespace Microsoft.Coyote.Tasks
@@ -141,7 +140,7 @@ namespace Microsoft.Coyote.Tasks
             /// <inheritdoc/>
             public override Task<Releaser> AcquireAsync()
             {
-                this.Resource.Runtime.ScheduleNextOperation();
+                this.Resource.Runtime.ScheduleNextOperation(false, true);
 
                 TCS awaiter;
                 if (this.IsAcquired)
@@ -190,7 +189,7 @@ namespace Microsoft.Coyote.Tasks
                     // This must be called outside the context of the lock, because it notifies
                     // the scheduler to try schedule another asynchronous operation that could
                     // in turn try to acquire this lock causing a deadlock.
-                    this.Resource.Runtime.ScheduleNextOperation();
+                    this.Resource.Runtime.ScheduleNextOperation(false, true);
                 }
             }
         }

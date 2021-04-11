@@ -11,7 +11,7 @@ namespace Microsoft.Coyote.Actors.SharedObjects
     /// A thread-safe dictionary that can be shared in-memory by actors.
     /// </summary>
     /// <remarks>
-    /// See also <see href="/coyote/learn/programming-models/actors/sharing-objects">Sharing Objects</see>.
+    /// See also <see href="/coyote/concepts/actors/sharing-objects">Sharing Objects</see>.
     /// </remarks>
     public static class SharedDictionary
     {
@@ -89,7 +89,7 @@ namespace Microsoft.Coyote.Actors.SharedObjects
             /// </summary>
             public override bool TryAdd(TKey key, TValue value)
             {
-                var op = this.Context.Scheduler.GetExecutingOperation<ActorOperation>();
+                var op = this.Context.Runtime.GetExecutingOperation<ActorOperation>();
                 this.Context.SendEvent(this.DictionaryActor, SharedDictionaryEvent.TryAddEvent(key, value, op.Actor.Id));
                 var e = op.Actor.ReceiveEventAsync(typeof(SharedDictionaryResponseEvent<bool>)).Result as SharedDictionaryResponseEvent<bool>;
                 return e.Value;
@@ -100,7 +100,7 @@ namespace Microsoft.Coyote.Actors.SharedObjects
             /// </summary>
             public override bool TryUpdate(TKey key, TValue newValue, TValue comparisonValue)
             {
-                var op = this.Context.Scheduler.GetExecutingOperation<ActorOperation>();
+                var op = this.Context.Runtime.GetExecutingOperation<ActorOperation>();
                 this.Context.SendEvent(this.DictionaryActor, SharedDictionaryEvent.TryUpdateEvent(key, newValue, comparisonValue, op.Actor.Id));
                 var e = op.Actor.ReceiveEventAsync(typeof(SharedDictionaryResponseEvent<bool>)).Result as SharedDictionaryResponseEvent<bool>;
                 return e.Value;
@@ -111,7 +111,7 @@ namespace Microsoft.Coyote.Actors.SharedObjects
             /// </summary>
             public override bool TryGetValue(TKey key, out TValue value)
             {
-                var op = this.Context.Scheduler.GetExecutingOperation<ActorOperation>();
+                var op = this.Context.Runtime.GetExecutingOperation<ActorOperation>();
                 this.Context.SendEvent(this.DictionaryActor, SharedDictionaryEvent.TryGetEvent(key, op.Actor.Id));
                 var e = op.Actor.ReceiveEventAsync(typeof(SharedDictionaryResponseEvent<Tuple<bool, TValue>>)).Result
                     as SharedDictionaryResponseEvent<Tuple<bool, TValue>>;
@@ -126,7 +126,7 @@ namespace Microsoft.Coyote.Actors.SharedObjects
             {
                 get
                 {
-                    var op = this.Context.Scheduler.GetExecutingOperation<ActorOperation>();
+                    var op = this.Context.Runtime.GetExecutingOperation<ActorOperation>();
                     this.Context.SendEvent(this.DictionaryActor, SharedDictionaryEvent.GetEvent(key, op.Actor.Id));
                     var e = op.Actor.ReceiveEventAsync(typeof(SharedDictionaryResponseEvent<TValue>)).Result as SharedDictionaryResponseEvent<TValue>;
                     return e.Value;
@@ -143,7 +143,7 @@ namespace Microsoft.Coyote.Actors.SharedObjects
             /// </summary>
             public override bool TryRemove(TKey key, out TValue value)
             {
-                var op = this.Context.Scheduler.GetExecutingOperation<ActorOperation>();
+                var op = this.Context.Runtime.GetExecutingOperation<ActorOperation>();
                 this.Context.SendEvent(this.DictionaryActor, SharedDictionaryEvent.TryRemoveEvent(key, op.Actor.Id));
                 var e = op.Actor.ReceiveEventAsync(typeof(SharedDictionaryResponseEvent<Tuple<bool, TValue>>)).Result
                     as SharedDictionaryResponseEvent<Tuple<bool, TValue>>;
@@ -158,7 +158,7 @@ namespace Microsoft.Coyote.Actors.SharedObjects
             {
                 get
                 {
-                    var op = this.Context.Scheduler.GetExecutingOperation<ActorOperation>();
+                    var op = this.Context.Runtime.GetExecutingOperation<ActorOperation>();
                     this.Context.SendEvent(this.DictionaryActor, SharedDictionaryEvent.CountEvent(op.Actor.Id));
                     var e = op.Actor.ReceiveEventAsync(typeof(SharedDictionaryResponseEvent<int>)).Result as SharedDictionaryResponseEvent<int>;
                     return e.Value;

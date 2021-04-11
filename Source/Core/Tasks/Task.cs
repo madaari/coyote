@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Microsoft.Coyote.Runtime;
-using Microsoft.Coyote.SystematicTesting;
 using AsyncMethodBuilder = System.Runtime.CompilerServices.AsyncMethodBuilderAttribute;
 using MethodImpl = System.Runtime.CompilerServices.MethodImplAttribute;
 using MethodImplOptions = System.Runtime.CompilerServices.MethodImplOptions;
@@ -22,7 +21,7 @@ namespace Microsoft.Coyote.Tasks
     /// with other asynchronous operations to find bugs.
     /// </summary>
     /// <remarks>
-    /// See <see href="/coyote/learn/programming-models/async/overview">Programming model: asynchronous tasks</see> for more information.
+    /// See <see href="/coyote/concepts/tasks/overview">Programming model: asynchronous tasks</see> for more information.
     /// </remarks>
     [AsyncMethodBuilder(typeof(AsyncTaskMethodBuilder))]
     public class Task : IDisposable
@@ -718,7 +717,7 @@ namespace Microsoft.Coyote.Tasks
         {
             if (CoyoteRuntime.IsExecutionControlled)
             {
-                CoyoteRuntime.Current.ScheduleNextOperation();
+                CoyoteRuntime.Current.ScheduleNextOperation(false, true);
             }
         }
 

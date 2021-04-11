@@ -6,7 +6,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.Coyote.Runtime;
-using Microsoft.Coyote.SystematicTesting;
 using SystemMonitor = System.Threading.Monitor;
 
 namespace Microsoft.Coyote.Tasks
@@ -226,7 +225,7 @@ namespace Microsoft.Coyote.Tasks
                 {
                     // If this operation is trying to acquire this lock while it is free, then inject a scheduling
                     // point to give another enabled operation the chance to race and acquire this lock.
-                    this.Resource.Runtime.ScheduleNextOperation();
+                    this.Resource.Runtime.ScheduleNextOperation(false, true);
                 }
 
                 if (this.Owner != null)
@@ -300,7 +299,7 @@ namespace Microsoft.Coyote.Tasks
                 {
                     // Pulses can happen nondeterministically while other operations execute,
                     // which models delays by the OS.
-                    this.Resource.Runtime.ScheduleNextOperation();
+                    this.Resource.Runtime.ScheduleNextOperation(false, true);
 
                     var pulseOperation = this.PulseQueue.Dequeue();
                     this.Pulse(pulseOperation);
@@ -415,7 +414,7 @@ namespace Microsoft.Coyote.Tasks
                     // Only release the lock if the invocation is not reentrant.
                     this.LockCountMap.Remove(op);
                     this.UnlockNextReady();
-                    this.Resource.Runtime.ScheduleNextOperation();
+                    this.Resource.Runtime.ScheduleNextOperation(false, true);
                 }
 
                 int useCount = Interlocked.Decrement(ref this.UseCount);

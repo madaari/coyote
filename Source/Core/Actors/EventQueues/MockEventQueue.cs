@@ -10,8 +10,11 @@ using System.Threading.Tasks;
 namespace Microsoft.Coyote.Actors.Mocks
 {
     /// <summary>
-    /// Implements a queue of events that is used during testing.
+    /// Implements a queue of events that can be used during systematic testing.
     /// </summary>
+    /// <remarks>
+    /// This is not a thread-safe queue.
+    /// </remarks>
     internal class MockEventQueue : IEventQueue
     {
         /// <summary>
@@ -47,14 +50,10 @@ namespace Microsoft.Coyote.Actors.Mocks
         /// </summary>
         private bool IsClosed;
 
-        /// <summary>
-        /// The size of the queue.
-        /// </summary>
+        /// <inheritdoc/>
         public int Size => this.Queue.Count;
 
-        /// <summary>
-        /// Checks if an event has been raised.
-        /// </summary>
+        /// <inheritdoc/>
         public bool IsEventRaised => this.RaisedEvent != default;
 
         /// <summary>
@@ -320,7 +319,7 @@ namespace Microsoft.Coyote.Actors.Mocks
             bool result = this.Owner.IsDefaultHandlerInstalled();
             if (result)
             {
-                this.Owner.Context.Scheduler.ScheduleNextOperation();
+                this.Owner.Context.Runtime.ScheduleNextOperation();
             }
 
             return result;
@@ -387,7 +386,7 @@ namespace Microsoft.Coyote.Actors.Mocks
             this.Owner.OnDropEvent(e, eventInfo);
 
         /// <summary>
-        /// Checks if the assertion holds, and if not, throws an <see cref="AssertionFailureException"/> exception.
+        /// Checks if the assertion holds, and if not, throws an exception.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected virtual void Assert(bool predicate, string s, object arg0, object arg1, object arg2) =>

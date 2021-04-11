@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Coyote.IO;
 using Microsoft.Coyote.Rewriting;
+using Microsoft.Coyote.Runtime;
 using Microsoft.Coyote.SystematicTesting;
 using Microsoft.Coyote.Telemetry;
 using Microsoft.Coyote.Utilities;
@@ -153,6 +154,11 @@ namespace Microsoft.Coyote
             if (!string.IsNullOrEmpty(configuration.TestMethodName))
             {
                 Console.WriteLine("... Method {0}", configuration.TestMethodName);
+            }
+
+            if (configuration.ParallelBugFindingTasks is 0)
+            {
+                configuration.DisableEnvironmentExit = false;
             }
 
             // Creates and runs the testing process scheduler.
