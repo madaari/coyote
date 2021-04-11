@@ -538,7 +538,7 @@ namespace Microsoft.Coyote.Interception
         {
             if (options.TaskScheduler != null && options.TaskScheduler != TaskScheduler.Default)
             {
-                throw new NotSupportedException($"using a custom task scheduler is not supported during systematic testing.");
+               ExceptionProvider.ThrowNotSupportedInvocationException($"using a custom task scheduler is not supported during systematic testing.");
             }
         }
     }

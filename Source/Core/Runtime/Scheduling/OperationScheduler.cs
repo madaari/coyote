@@ -155,8 +155,18 @@ namespace Microsoft.Coyote.Runtime
         /// <param name="maxValue">The max value.</param>
         /// <param name="next">The next delay.</param>
         /// <returns>True if there is a next delay, else false.</returns>
-        internal bool GetNextDelay(int maxValue, out int next) =>
-            (this.Strategy as FuzzingStrategy).GetNextDelay(maxValue, out next);
+        internal bool GetNextDelay(int maxValue, out int next)
+        {
+            if (this.Strategy is FuzzingStrategy)
+            {
+                return (this.Strategy as FuzzingStrategy).GetNextDelay(maxValue, out next);
+            }
+            else
+            {
+                next = 0;
+                return true;
+            }
+        }
 
         /// <summary>
         /// Returns a description of the scheduling strategy in text format.
@@ -167,5 +177,12 @@ namespace Microsoft.Coyote.Runtime
         /// Returns the replay error, if there is any.
         /// </summary>
         internal string GetReplayError() => this.ReplayStrategy?.ErrorText ?? string.Empty;
+
+        // To be used when RelaxedConcurrencyTesting is enabled.
+        public void SetSchedulerStrategyToDelayFuzzing()
+        {
+            this.SchedulingPolicy = SchedulingPolicy.Fuzzing;
+            this.Strategy = FuzzingStrategy.Create(this.Configuration, this.ValueGenerator);
+        }
     }
 }

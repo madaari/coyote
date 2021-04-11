@@ -42,8 +42,11 @@ namespace Microsoft.Coyote.Runtime
         /// <param name="methodName">The name of the invoked method that is not supported.</param>
         public static void ThrowNotSupportedInvocationException(string methodName)
         {
-            if (CoyoteRuntime.IsExecutionControlled)
+            // Do not throw any exception while Delay Fuzzing.
+            if (CoyoteRuntime.IsExecutionControlled && CoyoteRuntime.Current.SchedulingPolicy != SchedulingPolicy.Fuzzing)
             {
+                // If Relaxed CCT is enabled, we should switch the Scheduling Policy to Delay fuzzing.
+                CoyoteRuntime.CheckAndSetSchedulerStrategyToDelayFuzzing();
                 throw new NotSupportedException($"Invoking '{methodName}' is not supported during systematic testing.");
             }
         }

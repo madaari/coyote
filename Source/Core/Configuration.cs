@@ -385,12 +385,12 @@ namespace Microsoft.Coyote
             this.ConsiderDepthBoundHitAsBug = false;
             this.StrategyBound = 0;
             this.TimeoutDelay = 10;
-            this.DeadlockTimeout = 5000;
+            this.DeadlockTimeout = 0;
             this.SafetyPrefixBound = 0;
             this.LivenessTemperatureThreshold = 50000;
             this.UserExplicitlySetLivenessTemperatureThreshold = false;
             this.IsProgramStateHashingEnabled = false;
-            this.IsMonitoringEnabledInInProduction = false;
+            this.IsMonitoringEnabledInInProduction = true;
             this.AttachDebugger = false;
 
             this.ScheduleFile = string.Empty;

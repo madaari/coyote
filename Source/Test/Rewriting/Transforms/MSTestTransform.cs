@@ -259,6 +259,11 @@ namespace Microsoft.Coyote.Rewriting
                 this.EmitMethodCall(processor, resolvedConfigurationType, "WithTelemetryEnabled", this.Configuration.EnableTelemetry);
             }
 
+            if (this.Configuration.IsRelaxedControlledTestingEnabled)
+            {
+                this.EmitMethodCall(processor, resolvedConfigurationType, "WithRelaxedControlledTestingEnabled", this.Configuration.IsRelaxedControlledTestingEnabled);
+            }
+
             processor.Emit(OpCodes.Ldarg_0);
             processor.Emit(OpCodes.Ldftn, testMethod);
             processor.Emit(OpCodes.Newobj, actionConstructor);
